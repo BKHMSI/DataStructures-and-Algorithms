@@ -1,0 +1,10 @@
+Weather,Temp,Humidity,Windy,Play
+Rainy,Hot,High,FALSE,No
+Rainy,Hot,High,TRUE,No
+Sunny,Mild,High,FALSE,Yes
+Cloudy,Cold,Normal,TRUE,Yes
+Sunny,Mild,Normal,FALSE,Yes
+Cloudy,Hot,Normal,FALSE,Yes
+Rainy,Mild,Normal,TRUE,Yes
+Sunny,Cold,Normal,TRUE,No
+Sunny,Cold,Normal,FALSE,Yes

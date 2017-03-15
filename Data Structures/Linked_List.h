@@ -1,19 +1,19 @@
 //
-//  LinkedList.h
-//  CPlusPlus
+//  Linked_List.h
+//  CS110
 //
-//  Created by Badr AlKhamissi on 9/14/16.
-//  Copyright © 2016 Badr AlKhamissi. All rights reserved.
+//  Created by Badr AlKhamissi on 5/4/15.
+//  Copyright (c) 2015 Badr AlKhamissi. All rights reserved.
 //
 
-#ifndef LinkedList_h
-#define LinkedList_h
+#ifndef __CS110__Linked_List__
+#define __CS110__Linked_List__
 
 #include <stdio.h>
 #include <iostream>
 using namespace std;
 
-/**** THE ULTIMATE LINKED LIST CLASS ***/
+/**** LINKED LIST CLASS ***/
 // PUSH
 // POP - LIFO
 // DELETE SPECEFIC VALUE
@@ -33,6 +33,14 @@ private:
         node* next = NULL;
     };
     node *head, *prev;
+    
+    node* getHead(){return head;} // Function to return head of list
+    
+    // Overload function to SearchList to keep head private
+    bool searchList(T, node*);
+    // Overload function to displayReversed to keep head private
+    void displayReversed(node*);
+
 public:
     linkedList();
     linkedList(T);
@@ -45,19 +53,24 @@ public:
     void deleteNode(T);
     void sortList();
     void display();
-    void displayReversed(node*);
-    node* getHead(){return head;}
+    void displayReversed() { displayReversed(getHead());};
     int getSize();
-    bool searchList(T, node*);
+    bool searchList(T val) { return searchList(val,getHead());};
     linkedList compareLists(const linkedList&);
 };
 
+// Constructor
 template <class T>
 linkedList<T>::linkedList(){
     head = NULL;
     prev = head;
 }
 
+/* 
+ Overload Constructor
+ Parameters:
+    val -> value inserted in the head of the list
+ */
 template <class T>
 linkedList<T>::linkedList(T val){
     head = new node;
@@ -66,6 +79,12 @@ linkedList<T>::linkedList(T val){
     prev = head;
 }
 
+
+/*
+ Copy Constructor
+ Parameters:
+ rhs -> linked list to be copied into self
+ */
 template <class T>
 linkedList<T>::linkedList(const linkedList& rhs){
     node* tmp = new node;
@@ -79,6 +98,23 @@ linkedList<T>::linkedList(const linkedList& rhs){
     }
 }
 
+// Destructor
+template <class T>
+linkedList<T>::~linkedList(){
+    node* crsr = head;
+    while( crsr != NULL ) {
+        node* next = crsr->next;
+        delete crsr;
+        crsr = next;
+    }
+    head = NULL;
+}
+
+/*
+ Overload = operator 
+ Parameters:
+ rhs -> linked list to be copied into self
+*/
 template <class T>
 linkedList<T>& linkedList<T>::operator=(const linkedList& rhs){
     node* tmp = new node;
@@ -93,6 +129,11 @@ linkedList<T>& linkedList<T>::operator=(const linkedList& rhs){
     return *this;
 }
 
+/*
+ Insert value to Linked list
+ Parameters:
+ val -> value to be inserted to end of list
+ */
 template <class T>
 void linkedList<T>::push(T val){
     if(head == NULL){
@@ -110,6 +151,7 @@ void linkedList<T>::push(T val){
     }
 }
 
+// Remove last value in list
 template <class T>
 void linkedList<T>::pop(){
     if (head->next!= NULL) {
@@ -124,6 +166,7 @@ void linkedList<T>::pop(){
     }
 }
 
+// Display List
 template <class T>
 void linkedList<T>::display(){
     node *crsr;
@@ -134,14 +177,24 @@ void linkedList<T>::display(){
     }
 }
 
+/*
+ Display List in reverse using a recursive manner
+ Parameters:
+    crsr -> current pointer in list
+ */
 template <class T>
 void linkedList<T>::displayReversed(node* crsr){
     if (crsr!=NULL) {
         displayReversed(crsr->next);
         cout<<crsr->x<<" ";
-    
+    }
 }
 
+/*
+ Overloading [] to access specific element in list
+ Parameters:
+ index -> index of node to be accessed, 0 base
+ */
 template <class T>
 T& linkedList<T>::operator[](int index){
     node* crsr = head;
@@ -156,6 +209,7 @@ T& linkedList<T>::operator[](int index){
     }
 }
 
+// Return size of list
 template <class T>
 int linkedList<T>::getSize(){
     node*crsr = head;
@@ -167,6 +221,8 @@ int linkedList<T>::getSize(){
     return size;
 }
 
+
+// Sort list using values
 template <class T>
 void linkedList<T>::sortList(){
     node *crsr, *after;
@@ -174,7 +230,6 @@ void linkedList<T>::sortList(){
     for(int i = 0; i<size; i++){
         crsr = head;
         after = crsr->next;
-        
         for(int j = 0; j<size-1-i; j++){
             if(crsr->x>after->x){
                 T temp = crsr->x;
@@ -187,6 +242,11 @@ void linkedList<T>::sortList(){
     }
 }
 
+/*
+ Delete node by value
+ Parameters:
+    val -> value of the node to be deleted
+ */
 template <class T>
 void linkedList<T>::deleteNode(T val){
     node *prev, *crsr;
@@ -208,17 +268,12 @@ void linkedList<T>::deleteNode(T val){
     }
 }
 
-template <class T>
-linkedList<T>::~linkedList(){
-    node* crsr = head;
-    while( crsr != NULL ) {
-        node* next = crsr->next;
-        delete crsr;
-        crsr = next;
-    }
-    head = NULL;
-}
-
+/*
+ Searching list
+ Parameters:
+    val -> value of the node to be searched
+    crsr -> current pointer in list
+ */
 template <class T>
 bool linkedList<T>::searchList(T val, node* crsr){
     if(crsr!=NULL){
@@ -231,6 +286,11 @@ bool linkedList<T>::searchList(T val, node* crsr){
     return false;
 }
 
+/*
+ Adds common elements to a thrid list then return it
+ Parameters:
+    l2 -> list to be compared against self
+*/
 template <class T>
 linkedList<T> linkedList<T>::compareLists(const linkedList& l2){
     linkedList lhs;
@@ -244,5 +304,4 @@ linkedList<T> linkedList<T>::compareLists(const linkedList& l2){
     return lhs;
 }
 
-
-#endif /* LinkedList_h */
+#endif /* defined(__CS110__Linked_List__) */
